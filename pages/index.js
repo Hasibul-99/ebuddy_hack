@@ -1,8 +1,72 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
+import { Button, notification, Row, Col, box, Form, Input } from 'antd';
+import axios from "axios";
+import { useState } from 'react';
 
 export default function Home() {
+  const [token, setToken] = useState()
+
+  const onFinish = async (values) => {
+    console.log("values", values);
+    try {
+      const response = await axios.post('https://pilot-apigw.employeebuddy.xyz/accounts/v1/auth/login', values);
+      console.log(response?.data.data.token);
+      if (response) {
+        setToken(response?.data.data.token);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const punchIn = async () => {
+    // latitude: 23.7508483
+    // longitude: 90.4031033
+
+    try {
+      let data = {
+        lat_long: `${23.7508483}, ${90.4031033}`,
+        type: 2, // single punch type as described above
+        device: 'mobile-or-tab',
+        isEmulator: false
+      };
+      
+      let res = await axios({
+        method: 'post',
+        url: "https://pilot-apigw.employeebuddy.xyz/accounts/v1/hris/emp-attendance",
+        headers: {
+          'Authorization': `bearer ${token}`
+        },
+        data: data
+      })
+
+      if (res) {
+        notification['success']({
+          message: 'Notification Title',
+          description:
+            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        });
+      } else {
+        notification['error']({
+          message: 'Notification Title',
+          description:
+            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        });
+
+      }
+
+    } catch (error) {
+      notification['error']({
+        message: 'Notification Title',
+        description:
+          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      });
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -11,53 +75,57 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
+      <Row>
+        <Col span={12} offset={6}>
+          <Form
+            name="basic"
+            onFinish={onFinish}
+            autoComplete="off"
           >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+            <Form.Item
+              label="Employee Id"
+              name="emp_id"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+
+          {token ? <Button type="primary" size="large" onClick={() => punchIn()}>Punch</Button> : ''}
+        </Col>
+      </Row>
+
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+        <a href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
-          rel="noopener noreferrer"
-        >
+          rel="noopener noreferrer">
           Powered by{' '}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />

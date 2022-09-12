@@ -160,7 +160,7 @@ export default function Home() {
           </Form>
 
           {token ? <>
-            <Button type="primary" className='mr-3' size="large" onClick={() => punchIn()}>Punch</Button>
+            <Button type="primary" style={{ marginRight: "1rem" }} size="large" onClick={() => punchIn()}>Punch</Button>
             <Button type="primary" className='mr-3' size="large" onClick={() => punchInPilot()}>Punch Pilot</Button>
           </>  : ''}
         </Col>

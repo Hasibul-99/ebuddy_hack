@@ -11,7 +11,7 @@ export default function Home() {
   const onFinish = async (values) => {
     console.log("values", values);
     try {
-      const response = await axios.post('https://pilot-apigw.employeebuddy.xyz/accounts/v1/auth/login', values);
+      const response = await axios.post('https://live-api.employeebuddy.xyz/accounts/v1/auth/login', values);
       console.log(response?.data.data.token);
       if (response) {
         setToken(response?.data.data.token);
@@ -36,7 +36,7 @@ export default function Home() {
       
       let res = await axios({
         method: 'post',
-        url: "https://pilot-apigw.employeebuddy.xyz/accounts/v1/hris/emp-attendance",
+        url: "https://live-api.employeebuddy.xyz/accounts/v1/hris/emp-attendance",
         headers: {
           'Authorization': `bearer ${token}`
         },

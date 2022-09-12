@@ -67,6 +67,48 @@ export default function Home() {
     }
   }
 
+  const punchInPilot = async () => {
+    try {
+      let data = {
+        lat_long: `${23.7508483}, ${90.4031033}`,
+        type: 2, // single punch type as described above
+        device: 'mobile-or-tab',
+        isEmulator: false
+      };
+      
+      let res = await axios({
+        method: 'post',
+        url: "https://pilot-apigw.employeebuddy.xyz/accounts/v1/hris/emp-attendance",
+        headers: {
+          'Authorization': `bearer ${token}`
+        },
+        data: data
+      })
+
+      if (res) {
+        notification['success']({
+          message: 'Notification Title',
+          description:
+            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        });
+      } else {
+        notification['error']({
+          message: 'Notification Title',
+          description:
+            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        });
+
+      }
+
+    } catch (error) {
+      notification['error']({
+        message: 'Notification Title',
+        description:
+          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      });
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -117,7 +159,10 @@ export default function Home() {
             </Form.Item>
           </Form>
 
-          {token ? <Button type="primary" size="large" onClick={() => punchIn()}>Punch</Button> : ''}
+          {token ? <>
+            <Button type="primary" className='mr-3' size="large" onClick={() => punchIn()}>Punch</Button>
+            <Button type="primary" className='mr-3' size="large" onClick={() => punchInPilot()}>Punch Pilot</Button>
+          </>  : ''}
         </Col>
       </Row>
 

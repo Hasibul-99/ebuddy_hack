@@ -45,15 +45,15 @@ export default function Home() {
 
       if (res) {
         notification['success']({
-          message: 'Notification Title',
+          message: 'Live',
           description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            'Punch in from live successfully',
         });
       } else {
         notification['error']({
           message: 'Notification Title',
           description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            'Not Allow',
         });
 
       }
@@ -62,7 +62,7 @@ export default function Home() {
       notification['error']({
         message: 'Notification Title',
         description:
-          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          'Not Allow',
       });
     }
   }
@@ -87,24 +87,24 @@ export default function Home() {
 
       if (res) {
         notification['success']({
-          message: 'Notification Title',
+          message: 'Pilot Panch in',
           description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            'Punch in from pilot successfully',
         });
       } else {
         notification['error']({
-          message: 'Notification Title',
+          message: 'Error',
           description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            'Not Allow',
         });
 
       }
 
     } catch (error) {
       notification['error']({
-        message: 'Notification Title',
+        message: 'Error',
         description:
-          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          'Not Allow.',
       });
     }
   }
